@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.util.List;
@@ -71,7 +72,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvBody.setText(tweet.body);
             tvScreenName.setText(tweet.user.screenName);
             tvCreatedAt.setText(tweet.getRelativeTimeAgo(tweet.createdAt));
-            Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
+            Glide.with(context)
+                    .load(tweet.user.profileImageUrl)
+                    .transform(new CircleCrop())
+                    .into(ivProfileImage);
 
             if (tweet.tweetImageUrl != "") {
                 Glide.with(context)
