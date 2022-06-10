@@ -46,7 +46,7 @@ The following **additional** features are implemented:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
-![](https://github.com/mollyxu/Twitter/final.gif)
+![](https://github.com/mollyxu/Twitter/blob/master/ezgif.com-gif-maker.gif)
 
 
 GIF created with [Kap](https://getkap.co/).
