@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,7 +49,7 @@ public class TimelineActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
             @Override
             public void onRefresh() {
-                fetchTimelineAsync(0);
+                fetchTimelineAsync(getApplicationContext(),0);
             }
         });
         // Configure the refreshing colors
@@ -64,7 +65,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         // initialize the list of tweets and adapter
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets);
+        adapter = new TweetsAdapter(tweets);
 
         // recycler view setup: layout manager and the adapter
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
@@ -73,7 +74,7 @@ public class TimelineActivity extends AppCompatActivity {
         populateHomeTimeLine();
     }
 
-    private void fetchTimelineAsync(int page) {
+    private void fetchTimelineAsync(Context context, int page) {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
 
             @Override
@@ -84,15 +85,17 @@ public class TimelineActivity extends AppCompatActivity {
                 try {
                     adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
                     // Now we call setRefreshing(false) to signal refresh has finished
-                    swipeContainer.setRefreshing(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } finally {
+                    swipeContainer.setRefreshing(false);
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-
+                swipeContainer.setRefreshing(false);
+                Toast.makeText(context,"Oops", Toast.LENGTH_SHORT).show();
             }
         });
 
